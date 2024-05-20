@@ -4,13 +4,22 @@
 # Contributor: Gergely Imreh <imrehgATgmailDOTcom>
 # Contributor: Eric Belanger <eric@archlinux.org>
 # Contributor: Vikas Sharma <vickysharma@gmail.com>
+# Maintainer: Jan Kohnert <bughunter at jan-kohnert dot de>
+# Contributor: Miguel de Val-Borro <miguel dot deval at gmail dot com>
+# Contributor: James Tappin <jtappinatgmaildotcom>
+# Contributor: Gergely Imreh <imrehgATgmailDOTcom>
+# Contributor: Eric Belanger <eric@archlinux.org>
 pkgname=plplot
 pkgver=5.15.0
-pkgrel=7
+pkgrel=8
 pkgdesc="A cross-platform software package for creating scientific plots"
 arch=("i686" "x86_64")
 url="http://plplot.sourceforge.net/"
-license=("LGPL" "custom")
+license=(
+    "LGPL-2.0-or-later"
+    "GPL-2.0-or-later"
+    "LicenseRef-custom"
+)
 depends=(
     "cairo"
     "gcc-libs"
@@ -33,7 +42,13 @@ depends=(
     "wxwidgets-common"
     "wxwidgets-gtk3"
 )
-makedepends=("cmake" "jdk-openjdk" "pkg-config" "swig")
+makedepends=(
+    "cmake"
+    "jdk-openjdk"
+    "pkg-config"
+    "python-setuptools"
+    "swig"
+)
 optdepends=("bash")
 options=("!libtool")
 source=(
@@ -57,26 +72,11 @@ build() {
     fi
     mkdir build
     cd build
-    cmake \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DENABLE_ada=OFF \
-        -DENABLE_c=ON \
-        -DENABLE_cxx=ON \
-        -DENABLE_d=OFF \
-        -DENABLE_fortran=ON \
-        -DENABLE_itcl=OFF \
-        -DENABLE_itk=OFF \
-        -DENABLE_java=ON \
-        -DENABLE_lua=ON \
-        -DENABLE_ocaml=OFF \
-        -DENABLE_octave=OFF \
-        -DENABLE_pyqt5=OFF \
-        -DENABLE_python=ON \
-        -DENABLE_qt=ON \
-        -DENABLE_tcl=ON \
-        -DENABLE_tk=ON \
-        -DENABLE_wxwidgets=ON \
-        -DPLD_wxwidgets=ON  ..
+    cmake -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_ada=OFF -DENABLE_c=ON -DENABLE_cxx=ON -DENABLE_d=OFF \
+        -DENABLE_fortran=ON -DENABLE_itcl=OFF -DENABLE_itk=OFF -DENABLE_java=ON -DENABLE_lua=ON \
+        -DENABLE_ocaml=OFF -DENABLE_octave=OFF -DENABLE_pyqt5=OFF -DENABLE_python=ON -DENABLE_qt=ON \
+        -DENABLE_tcl=ON -DENABLE_tk=ON -DENABLE_wxwidgets=ON -DPLD_wxwidgets=ON  ..
+
     make
 }
 
@@ -85,3 +85,4 @@ package() {
     make DESTDIR="${pkgdir}" install
     install -D -m644 ../Copyright "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
+
